@@ -35,12 +35,13 @@ export class CustomConfigService implements IConfig {
     return this.configService.get('DATABASE_PASSWORD', { infer: true });
   }
 
-  public get databaseSchema(): string {
-    return this.configService.get('DATABASE_SCHEMA', { infer: true });
-  }
-
   // secret
   public get secret(): string {
     return this.configService.get('SECRET', { infer: true });
+  }
+
+  // auth
+  public get saltRounds(): number {
+    return this.configService.get('SALT_ROUNDS', { infer: true });
   }
 }

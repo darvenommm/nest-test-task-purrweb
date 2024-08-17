@@ -5,8 +5,8 @@ export type IRawConfig = Readonly<{
   DATABASE_NAME: string;
   DATABASE_USERNAME: string;
   DATABASE_PASSWORD: string;
-  DATABASE_SCHEMA: string;
   SECRET: string;
+  SALT_ROUNDS: number;
 }>;
 
 export type IConfig = Readonly<{
@@ -16,6 +16,6 @@ export type IConfig = Readonly<{
   databaseName: string;
   databaseUsername: string;
   databasePassword: string;
-  databaseSchema: string;
   secret: string;
+  saltRounds: number;
 }>;

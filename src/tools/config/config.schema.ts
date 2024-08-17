@@ -26,8 +26,9 @@ export class ConfigSchema implements IRawConfig {
   DATABASE_USERNAME: string;
 
   @IsString()
-  DATABASE_SCHEMA: string;
-
-  @IsString()
   SECRET: string;
+
+  @IsInt()
+  @Min(1)
+  SALT_ROUNDS: number;
 }
