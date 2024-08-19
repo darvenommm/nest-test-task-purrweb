@@ -9,10 +9,11 @@ import { Comment } from './comment/comment.entity';
 import { ColumnController } from './column/column.controller';
 import { ColumnService } from './column/column.service';
 import { ColumnHelper } from './column/column.helper';
+import { ColumnGuard } from './column/column.guard';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Column, Card, Comment]), AuthModule],
   controllers: [ColumnController],
-  providers: [ColumnService, ColumnHelper],
+  providers: [ColumnService, ColumnHelper, ColumnGuard],
 })
 export class TasksModule {}

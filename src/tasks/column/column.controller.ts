@@ -9,12 +9,14 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 
 import { Column } from './column.entity';
 import { ColumnService } from './column.service';
 import { CreateColumnDTO } from './dto/createColumn.dto';
 import { UpdateColumnDTO } from './dto/updateColumn.dto';
+import { ColumnGuard } from './column.guard';
 
 @Controller('users/:userId/columns')
 export class ColumnController {
@@ -33,6 +35,7 @@ export class ColumnController {
     return this.columnService.getAll(userId);
   }
 
+  @UseGuards(ColumnGuard)
   @Post()
   public async create(
     @Param('userId', ParseUUIDPipe) userId: string,
@@ -41,6 +44,7 @@ export class ColumnController {
     this.columnService.create(userId, createColumnDTO);
   }
 
+  @UseGuards(ColumnGuard)
   @Patch(':columnId')
   @HttpCode(HttpStatus.NO_CONTENT)
   public async update(
@@ -51,6 +55,7 @@ export class ColumnController {
     this.update(userId, columnId, updateColumnDTO);
   }
 
+  @UseGuards(ColumnGuard)
   @Delete(':columnId')
   @HttpCode(HttpStatus.NO_CONTENT)
   public async delete(
