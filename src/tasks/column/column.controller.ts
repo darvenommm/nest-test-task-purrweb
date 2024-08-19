@@ -16,7 +16,7 @@ import { Column } from './column.entity';
 import { ColumnService } from './column.service';
 import { CreateColumnDTO } from './dto/createColumn.dto';
 import { UpdateColumnDTO } from './dto/updateColumn.dto';
-import { ColumnGuard } from './column.guard';
+import { AuthGuard } from 'src/auth';
 
 @Controller('users/:userId/columns')
 export class ColumnController {
@@ -35,7 +35,7 @@ export class ColumnController {
     return this.columnService.getAll(userId);
   }
 
-  @UseGuards(ColumnGuard)
+  @UseGuards(AuthGuard)
   @Post()
   public async create(
     @Param('userId', ParseUUIDPipe) userId: string,
@@ -44,7 +44,7 @@ export class ColumnController {
     this.columnService.create(userId, createColumnDTO);
   }
 
-  @UseGuards(ColumnGuard)
+  @UseGuards(AuthGuard)
   @Patch(':columnId')
   @HttpCode(HttpStatus.NO_CONTENT)
   public async update(
@@ -55,7 +55,7 @@ export class ColumnController {
     this.update(userId, columnId, updateColumnDTO);
   }
 
-  @UseGuards(ColumnGuard)
+  @UseGuards(AuthGuard)
   @Delete(':columnId')
   @HttpCode(HttpStatus.NO_CONTENT)
   public async delete(

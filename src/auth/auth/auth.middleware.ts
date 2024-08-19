@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 
@@ -23,18 +23,28 @@ export class AuthMiddleware implements NestMiddleware {
   public async use(request: Request, _: Response, next: NextFunction): Promise<void> {
     const accessToken: CanBeUndefined<string> = request.signedCookies['accessToken'];
 
-    if (accessToken) {
+    if (!accessToken) return next();
+
+    const userId = await this.getUserIdByAccessToken(accessToken);
+
+    if (!userId) {
+      delete request.signedCookies['accessToken'];
+      return next();
+    }
+
+    request.user = (await this.userRepository.findOneBy({ id: userId })) ?? undefined;
+    next();
+  }
+
+  private async getUserIdByAccessToken(accessToken: string): Promise<null | string> {
+    try {
       const { sub: userId }: AccessPayload = await this.jwtService.verifyAsync(accessToken, {
         secret: this.config.secret,
       });
 
-      const user = await this.userRepository.findOneBy({ id: userId });
-
-      if (!user) throw new ConflictException('Incorrect payload');
-
-      request['user'] = user;
+      return userId;
+    } catch {
+      return null;
     }
-
-    next();
   }
 }

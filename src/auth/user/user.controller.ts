@@ -21,8 +21,8 @@ import type { User } from '../entities/user.entity';
 export class UserController {
   public constructor(private readonly userService: UserService) {}
 
-  @Get(':id')
-  public async getONe(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
+  @Get(':userId')
+  public async getONe(@Param('userId', ParseUUIDPipe) id: string): Promise<User> {
     return this.userService.getOne(id);
   }
 
@@ -34,19 +34,19 @@ export class UserController {
   // create with AuthController
 
   @UseGuards(AuthGuard)
-  @Patch(':id')
+  @Patch(':userId')
   @HttpCode(HttpStatus.NO_CONTENT)
   public async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('userId', ParseUUIDPipe) id: string,
     @Body() updateDTO: UpdateDTO,
   ): Promise<void> {
     return this.userService.update(id, updateDTO);
   }
 
   @UseGuards(AuthGuard)
-  @Delete(':id')
+  @Delete(':userId')
   @HttpCode(HttpStatus.NO_CONTENT)
-  public async delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+  public async delete(@Param('userId', ParseUUIDPipe) id: string): Promise<void> {
     return this.userService.delete(id);
   }
 }
