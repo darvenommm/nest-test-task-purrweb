@@ -3,13 +3,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 
 import { AuthController } from './auth/auth.controller';
-import { UsersController } from './user/user.controller';
+import { UserController } from './user/user.controller';
+import { AuthMiddleware } from './auth/auth.middleware';
 import { AuthGuard } from './auth/auth.guard';
 import { AuthService } from './auth/auth.service';
 import { UserService } from './user/user.service';
 
 import { Config } from 'src/tools/config';
 import { User } from './entities/user.entity';
+
+import type { MiddlewareConsumer, NestModule } from '@nestjs/common';
+import { UserHelper } from './user/user.helper';
 
 @Module({
   imports: [
@@ -24,8 +28,12 @@ import { User } from './entities/user.entity';
       inject: [Config],
     }),
   ],
-  controllers: [AuthController, UsersController],
-  providers: [AuthGuard, AuthService, UserService],
+  controllers: [AuthController, UserController],
+  providers: [AuthMiddleware, AuthGuard, AuthService, UserService, UserHelper],
   exports: [AuthGuard],
 })
-export class AuthModule {}
+export class AuthModule implements NestModule {
+  public configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(AuthMiddleware).forRoutes('*');
+  }
+}

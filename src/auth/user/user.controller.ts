@@ -7,7 +7,7 @@ import {
   HttpStatus,
   Param,
   ParseUUIDPipe,
-  Put,
+  Patch,
   UseGuards,
 } from '@nestjs/common';
 
@@ -18,7 +18,7 @@ import { UpdateDTO } from './dto/update.dto';
 import type { User } from '../entities/user.entity';
 
 @Controller('users')
-export class UsersController {
+export class UserController {
   public constructor(private readonly userService: UserService) {}
 
   @Get(':id')
@@ -34,7 +34,7 @@ export class UsersController {
   // create with AuthController
 
   @UseGuards(AuthGuard)
-  @Put(':id')
+  @Patch(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   public async update(
     @Param('id', ParseUUIDPipe) id: string,
